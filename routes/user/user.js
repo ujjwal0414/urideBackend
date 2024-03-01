@@ -1,10 +1,13 @@
 const express=require("express");
 let router=express.Router();
-let {getUser,getAlluser,createUserViamail}=require("../../controllers/user/userCont")
+let {updateUserSearches}=require("../../controllers/userSearches/userSearches")
+let {getUser,getAlluser,createUserViamail,userLogin,deleteUser}=require("../../controllers/user/userCont")
 router.route("/").get(getUser);
 router.route("/getAlluser").get(getAlluser);
 router.route("/createUser").post(createUserViamail)
-
+router.route("/userLogin").get(userLogin)
+router.route("/insertSearch/:id").put(updateUserSearches)
+router.route("/deleteUser/:id").delete(deleteUser)
 
 
 module.exports=router;
