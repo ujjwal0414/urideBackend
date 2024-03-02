@@ -21,7 +21,7 @@ const createUserViamail=async(req,resp)=>{
     }
     //console.log(req.query,req.params,req.body);
     try {
-        let checkedUser=await checkUserExistense(req.body.email,req.body.password);
+        let checkedUser=await checkUserExistense(req.body.email,req.body.password,false);
         if(!checkedUser){
         let response=new userModel(req.body);
         
@@ -53,8 +53,14 @@ const createUserViamail=async(req,resp)=>{
     }
 }
 //creating function to check if user exists or not
-let checkUserExistense=async(email,pass)=>{
-    let userExs=await userModel.findOne({email:email,password:pass});
+let checkUserExistense=async(email,pass,loginType)=>{
+    let userExs=null;
+    if(loginType){
+        userExs=await userModel.findOne({email:email,password:pass});
+    }
+    else{
+        userExs=await userModel.findOne({email:email}); 
+    }
     if(userExs===null){
         return false
     }
@@ -66,15 +72,15 @@ let checkUserExistense=async(email,pass)=>{
 //function for user signin
 let userLogin=async(req,resp)=>{
     try {
-        let checkedUser=await checkUserExistense(req.body.email,req.body.password);
+        let checkedUser=await checkUserExistense(req.body.email,req.body.password,true);
         
         if(checkedUser){
             let loggedUser=await userModel.findOne({email:req.body.email,password:req.body.password})
-            resp.send({status:200,data:true,msg:"user Exists",uid:loggedUser.uid,gid:loggedUser.gid})
+            resp.send({status:200,data:true,msg:"user Exists",uid:loggedUser.uid,gid:loggedUser.gid,userType:loggedUser.userType})
 
         } 
         else{
-            resp.send({status:400,data:false,msg:"User not found"})
+            resp.send({status:400,data:false,msg:"Incorrect email or password"})
         }
     } catch (error) {
         resp.send({status:403,msg:"An error occured"})
@@ -92,4 +98,20 @@ let deleteUser=async(req,resp)=>{
         resp.send({status:400,msg:"error occured while deleting"});
     }
 }
-module.exports={getUser,getAlluser,createUserViamail,userLogin,deleteUser}
+
+//function for gettinh user details
+let indiUser=async(req,resp)=>{
+    try {
+      let id=req.params.id;
+      let userResponse=await userModel.findOne({uid:id}) || await userModel.findOne({gid:id});
+      if(userResponse!==null){
+        resp.send({status:200,data:userResponse})
+      }  
+      else{
+        resp.send({status:201,msg:"user not found"});
+      }
+    } catch (error) {
+        resp.send({status:400,msg:"An error occured"});
+    }
+}
+module.exports={getUser,getAlluser,createUserViamail,userLogin,deleteUser,indiUser}
