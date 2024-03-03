@@ -114,4 +114,66 @@ let indiUser=async(req,resp)=>{
         resp.send({status:400,msg:"An error occured"});
     }
 }
-module.exports={getUser,getAlluser,createUserViamail,userLogin,deleteUser,indiUser}
+let createUserViaGoogle=async(req,resp)=>{
+    try {
+        let checkedUser=await checkUserExistense(req.body.email,"",false);
+        if(!checkedUser){
+            let response=new userModel(req.body);
+            response=await response.save();
+            if(response){
+                let usrSrch=new userSearches({
+                    email:req.body.email,
+                    uid:response._id
+                })
+                usrSrch=await usrSrch.save();
+              let updatedData=await userModel.findOneAndUpdate(response,{
+                uid:response._id
+              },{
+                new:true
+              });
+            
+             // console.log(updatedData);
+              resp.send({status:200,data:updatedData})
+            }
+            else{
+                resp.send({status:403,err:"error while updating"})
+            }
+        }
+        else{
+            resp.send({status:201,data:"user exists"})
+
+        }
+    } catch (error) {
+       resp.send({status:400,msg:"Unable to create user"}) 
+    }
+}
+//creating function to check if user exists or not via google or not
+let checkUserExistenseViaGoogle=async(email,loginType)=>{
+    let userExs=null;
+    if(loginType){
+        userExs=await userModel.findOne({email:email});
+    }
+    if(userExs===null){
+        return false
+    }
+    else{
+        return true
+    }
+   
+}
+let userLoginViaGoogle=async(req,resp)=>{
+    try {
+        let checkedUser=await checkUserExistenseViaGoogle(req.body.email,true);
+        if(checkedUser){
+            let loggedUser=await userModel.findOne({email:req.body.email})
+            resp.send({status:200,data:true,msg:"user Exists",uid:loggedUser.uid,userType:loggedUser.userType})
+
+        } 
+        else{
+            resp.send({status:400,data:false,msg:"Incorrect email provided"})
+        }
+    } catch (error) {
+        resp.send({status:403,msg:"An error occured"})
+    }
+}
+module.exports={getUser,getAlluser,createUserViamail,userLogin,deleteUser,indiUser,createUserViaGoogle,userLoginViaGoogle}
