@@ -1,7 +1,8 @@
+const { Decimal128 } = require("mongodb");
 const mongoose=require("mongoose")
 let PlacesSearches=new mongoose.Schema({
-    lon:String,
-    lat:String
+    c1:[Decimal128,Decimal128],
+    c2:[Decimal128,Decimal128]
 })
 let userSearchSchema=new mongoose.Schema({
     email:String,
