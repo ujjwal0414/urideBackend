@@ -148,10 +148,10 @@ let createUserViaGoogle=async(req,resp)=>{
     }
 }
 //creating function to check if user exists or not via google or not
-let checkUserExistenseViaGoogle=async(email,loginType)=>{
+let checkUserExistenseViaGoogle=async(email,gid,loginType)=>{
     let userExs=null;
     if(loginType){
-        userExs=await userModel.findOne({email:email});
+        userExs=await userModel.findOne({email:email,gid:gid});
     }
     if(userExs===null){
         return false
@@ -163,10 +163,10 @@ let checkUserExistenseViaGoogle=async(email,loginType)=>{
 }
 let userLoginViaGoogle=async(req,resp)=>{
     try {
-        let checkedUser=await checkUserExistenseViaGoogle(req.body.email,true);
+        let checkedUser=await checkUserExistenseViaGoogle(req.body.email,req.body.gid,true);
         if(checkedUser){
-            let loggedUser=await userModel.findOne({email:req.body.email})
-            resp.send({status:200,data:true,msg:"user Exists",uid:loggedUser.uid,userType:loggedUser.userType})
+            let loggedUser=await userModel.findOne({email:req.body.email,gid:req.body.gid})
+            resp.send({status:200,data:true,msg:"user Exists",uid:loggedUser.uid,gid:loggedUser.gid,userType:loggedUser.userType})
 
         } 
         else{
