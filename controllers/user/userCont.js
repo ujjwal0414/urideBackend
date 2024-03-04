@@ -1,6 +1,6 @@
 let {userModel}=require("../../Schema/userSchema")
 let {userSearches}=require("../../Schema/userSearchesSchema")
-
+let {sendEmailResponse}=require("../../MailPackage/mail")
 const getUser=async(req,resp)=>{
     resp.send({msg:"User starting rout"})
 }
@@ -39,6 +39,7 @@ const createUserViamail=async(req,resp)=>{
           });
         
          // console.log(updatedData);
+         sendEmailResponse(req.body.email)
           resp.send({status:200,data:updatedData})
         }
         else{
@@ -71,11 +72,13 @@ let checkUserExistense=async(email,pass,loginType)=>{
 }
 //function for user signin
 let userLogin=async(req,resp)=>{
+    
     try {
         let checkedUser=await checkUserExistense(req.body.email,req.body.password,true);
-        
+       
         if(checkedUser){
             let loggedUser=await userModel.findOne({email:req.body.email,password:req.body.password})
+            
             resp.send({status:200,data:true,msg:"user Exists",uid:loggedUser.uid,gid:loggedUser.gid,userType:loggedUser.userType})
 
         } 
@@ -133,6 +136,7 @@ let createUserViaGoogle=async(req,resp)=>{
               });
             
              // console.log(updatedData);
+             sendEmailResponse(req.body.email)
               resp.send({status:200,data:updatedData})
             }
             else{
@@ -166,6 +170,7 @@ let userLoginViaGoogle=async(req,resp)=>{
         let checkedUser=await checkUserExistenseViaGoogle(req.body.email,req.body.gid,true);
         if(checkedUser){
             let loggedUser=await userModel.findOne({email:req.body.email,gid:req.body.gid})
+            
             resp.send({status:200,data:true,msg:"user Exists",uid:loggedUser.uid,gid:loggedUser.gid,userType:loggedUser.userType})
 
         } 
