@@ -10,9 +10,6 @@ let updateUserSearches=async(req,resp)=>{
        let insertedReponse=await userSearches.updateOne({uid:req.params.id},{
         $push:{
             srch:req.body
-        },
-        $inc:{
-            searchCount:1
         }
        })
        resp.send({status:200,data:insertedReponse})
@@ -22,6 +19,24 @@ let updateUserSearches=async(req,resp)=>{
     }
     } catch (error) {
        resp.send({status:400,err:"Error occured while inserting the search"}) 
+    }
+}
+let incrementSrchCount=async(req,resp)=>{
+    try {
+        let srchStat=await isLimitReached(req.params.id);
+        if(srchStat){
+            let insertedReponse=await userSearches.updateOne({uid:req.params.id},{
+             $inc:{
+                 searchCount:1
+             }
+            })
+            resp.send({status:200,data:insertedReponse,msg:"Search count incremented"})
+         }
+         else{
+             resp.send({status:201,msg:"User has reached its search limit"})
+         }
+    } catch (error) {
+        resp.send({status:400,err:"Search count couldn't be appended"})
     }
 }
 let isLimitReached=async(id)=>{
@@ -34,4 +49,4 @@ let isLimitReached=async(id)=>{
     }
     
 }
-module.exports={updateUserSearches}
+module.exports={updateUserSearches,incrementSrchCount}
