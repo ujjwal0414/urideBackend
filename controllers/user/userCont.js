@@ -155,7 +155,7 @@ let createUserViaGoogle=async(req,resp)=>{
 let checkUserExistenseViaGoogle=async(email,gid,loginType)=>{
     let userExs=null;
     if(loginType){
-        userExs=await userModel.findOne({email:email,gid:gid});
+        userExs=await userModel.findOne({email:email});
     }
     if(userExs===null){
         return false
