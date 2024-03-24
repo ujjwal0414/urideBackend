@@ -7,7 +7,8 @@ let userSchema=new mongoose.Schema({
     password:String,
     phone:Number,
     userProfilePic:{type:String,default:"https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"},
-    userType:String
+    userType:String,
+    userSubscription:{type:Number,default:25}
 })
 let userModel=mongoose.model("user",userSchema)
 module.exports={userModel}

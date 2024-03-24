@@ -1,13 +1,13 @@
 const { Decimal128 } = require("mongodb");
 const mongoose=require("mongoose")
 let PlacesSearches=new mongoose.Schema({
-    c1:[Decimal128,Decimal128],
-    c2:[Decimal128,Decimal128]
+    route:[String,String]
 })
 let userSearchSchema=new mongoose.Schema({
     email:String,
     uid:String,
     gid:String,
+    allowedNos:{type:Number,default:25},
     srch:[PlacesSearches],
     searchCount:{type:Number,default:0}
 })

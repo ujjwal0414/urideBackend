@@ -41,7 +41,7 @@ let incrementSrchCount=async(req,resp)=>{
 }
 let isLimitReached=async(id)=>{
     let limitReponse=await userSearches.findOne({uid:id});
-    if(limitReponse.searchCount<25){
+    if(limitReponse.searchCount<limitReponse.allowedNos){
         return true
     }
     else {
