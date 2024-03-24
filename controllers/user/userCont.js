@@ -109,7 +109,6 @@ let indiUser=async(req,resp)=>{
       let userResponse=await userModel.findOne({uid:id}) 
       if(userResponse!==null){
         let {srch,searchCount}=await userSearches.findOne({uid:id});
-
         resp.send({status:200,data:userResponse,routes:srch,srchCount:searchCount})
       }  
       else{
