@@ -1,7 +1,7 @@
 const express=require("express");
 let router=express.Router();
 let {updateUserSearches,incrementSrchCount}=require("../../controllers/userSearches/userSearches")
-let {getUser,getAlluser,createUserViamail,createUserViaGoogle,userLogin,deleteUser,indiUser,userLoginViaGoogle}=require("../../controllers/user/userCont")
+let {getUser,getAlluser,usrSubs,createUserViamail,createUserViaGoogle,userLogin,deleteUser,indiUser,userLoginViaGoogle}=require("../../controllers/user/userCont")
 router.route("/").get(getUser);
 router.route("/getAlluser").get(getAlluser);
 router.route("/createUser").post(createUserViamail)
@@ -12,6 +12,6 @@ router.route("/deleteUser/:id").delete(deleteUser)
 router.route("/getUserDetails/:id").get(indiUser)
 router.route("/createUserViaGoogle").post(createUserViaGoogle)
 router.route("/userLoginViaGoogle").post(userLoginViaGoogle)
-
+router.route("/userSubscription/:id").put(usrSubs)
 
 module.exports=router;

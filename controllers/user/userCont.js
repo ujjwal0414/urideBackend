@@ -185,5 +185,11 @@ let userLoginViaGoogle=async(req,resp)=>{
 
 
 //UserSubscription apiController
-
-module.exports={getUser,getAlluser,createUserViamail,userLogin,deleteUser,indiUser,createUserViaGoogle,userLoginViaGoogle}
+let usrSubs=async(req,resp)=>{
+ try {
+    
+ } catch (error) {
+    resp.send({status:400,msg:"unable to process reuest"})
+ }   
+}
+module.exports={getUser,getAlluser,createUserViamail,userLogin,deleteUser,indiUser,createUserViaGoogle,usrSubs,userLoginViaGoogle}
