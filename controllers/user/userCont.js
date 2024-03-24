@@ -106,9 +106,11 @@ let deleteUser=async(req,resp)=>{
 let indiUser=async(req,resp)=>{
     try {
       let id=req.params.id;
-      let userResponse=await userModel.findOne({uid:id}) || await userModel.findOne({gid:id});
+      let userResponse=await userModel.findOne({uid:id}) 
       if(userResponse!==null){
-        resp.send({status:200,data:userResponse})
+        let {srch,searchCount}=await userSearches.findOne({uid:id});
+
+        resp.send({status:200,data:userResponse,routes:srch,srchCount:searchCount})
       }  
       else{
         resp.send({status:201,msg:"user not found"});
