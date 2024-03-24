@@ -187,6 +187,26 @@ let userLoginViaGoogle=async(req,resp)=>{
 //UserSubscription apiController
 let usrSubs=async(req,resp)=>{
  try {
+    let subsApiCount=req.body.apiNos;
+    let response=await userSearches.findOneAndUpdate({uid:req.params.id},{
+        $set:{
+            allowedNos:subsApiCount
+        }
+    }
+    ,{
+        new:true
+    });
+    if(response){
+     let userUpdateResponse=await userModel.findOneAndUpdate({uid:req.params.id},{
+        $set:{
+          userSubscription:subsApiCount
+        }
+     })
+     resp.send({status:200,msg:"User subscription changed"})
+    }
+    else{
+        resp.send({status:406,msg:"there were some problem while updating"})
+    }
     
  } catch (error) {
     resp.send({status:400,msg:"unable to process reuest"})
