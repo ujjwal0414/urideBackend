@@ -182,4 +182,8 @@ let userLoginViaGoogle=async(req,resp)=>{
         resp.send({status:403,msg:"An error occured"})
     }
 }
+
+
+//UserSubscription apiController
+
 module.exports={getUser,getAlluser,createUserViamail,userLogin,deleteUser,indiUser,createUserViaGoogle,userLoginViaGoogle}
