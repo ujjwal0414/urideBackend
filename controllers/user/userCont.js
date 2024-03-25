@@ -212,4 +212,22 @@ let usrSubs=async(req,resp)=>{
     resp.send({status:400,msg:"unable to process reuest"})
  }   
 }
-module.exports={getUser,getAlluser,createUserViamail,userLogin,deleteUser,indiUser,createUserViaGoogle,usrSubs,userLoginViaGoogle}
+
+
+//update user pic
+let updatePic=async(req,resp)=>{
+    try {
+        let id=req.params.id
+       let updatePic=await userModel.findOneAndUpdate({uid:id},{
+        $set:{
+            userProfilePic:req.body.url
+        }
+       },{
+        new:true
+       }) 
+       resp.send({status:200,data:"profile pic updated"})
+    } catch (error) {
+      resp.send({status:400,msg:"unable to update"})  
+    }
+}
+module.exports={getUser,getAlluser,createUserViamail,userLogin,deleteUser,indiUser,updatePic,createUserViaGoogle,usrSubs,userLoginViaGoogle}
