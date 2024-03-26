@@ -212,8 +212,6 @@ let usrSubs=async(req,resp)=>{
     resp.send({status:400,msg:"unable to process reuest"})
  }   
 }
-
-
 //update user pic
 let updatePic=async(req,resp)=>{
     try {
