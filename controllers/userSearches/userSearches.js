@@ -1,10 +1,10 @@
 let {userSearches}=require("../../Schema/userSearchesSchema");
 let updateUserSearches=async(req,resp)=>{
     try {
-      let srch={
-        lon:"243",
-        lat:"32"
-      }
+    //   let srch={
+    //     lon:"243",
+    //     lat:"32"
+    //   }
      let srchStat=await isLimitReached(req.params.id);
      if(srchStat){
        let insertedReponse=await userSearches.updateOne({uid:req.params.id},{
